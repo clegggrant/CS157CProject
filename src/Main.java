@@ -22,34 +22,34 @@ import java.util.logging.Logger;
 import java.util.Scanner;
 
 public class Main {
-
+	
 	private void count() {
 		MongoClientURI connectionString = new MongoClientURI("mongodb://ec2-13-59-38-216.us-east-2.compute.amazonaws.com:27018");
 		MongoClient mongo = new MongoClient(connectionString);
 		MongoDatabase database = mongo.getDatabase("testdb");
 		MongoCollection<Document> collection = database.getCollection("testCol");
-		System.out.println("Collection " +
-				collection.getNamespace().getDatabaseName() +
-				"." +
-				collection.getNamespace().getCollectionName() +
+		System.out.println("Collection " + 
+				collection.getNamespace().getDatabaseName() + 
+				"." + 
+				collection.getNamespace().getCollectionName() + 
 				" has " +
-				collection.countDocuments() +
+				collection.countDocuments() + 
 				" records.");
 		mongo.close();
 	}
-
+	
 	public static void main(String[] args) {
 		Logger mongoLogger = Logger.getLogger("org.mongodb.driver");
 		mongoLogger.setLevel(Level.SEVERE);
-
+		
 		Main main = new Main();
-
-		System.out.println("Welcome to the Employee Compensation console\n\n"
+		
+		System.out.println("Welcome to the Employee Compensation Console\n\n"
 				+ "Version: 0.1\n\n"
 				+ "Enter help for list of commands\n");
-
+		
 		Scanner s = new Scanner(System.in);
-
+		
 		while(true) {
 			System.out.print("command> ");
 			String input = s.next();
@@ -75,6 +75,9 @@ public class Main {
 				break;
 			else if(input.toLowerCase().trim().equals("count")) {
 				main.count();
+			}
+			else {
+				System.out.println("Invalid command. Use help to view commands");
 			}
 		}
 		s.close();
