@@ -52,7 +52,7 @@ public class Main {
 
 		while(true) {
 			System.out.print("command> ");
-			String input = s.next();
+			String input = s.nextLine();
 			if(input.toLowerCase().trim().equals("help")) {
 				System.out.println("exit - exit console");
 				System.out.println("count - return the number of records on file");
@@ -76,8 +76,11 @@ public class Main {
 			else if(input.toLowerCase().trim().equals("count")) {
 				main.count();
 			}
+			else if(input.isEmpty()) {
+
+			}
 			else {
-				System.out.println("Invalid command. Use help to view commands");
+				System.out.println("Invalid command. Use help to view commands.");
 			}
 		}
 		s.close();
