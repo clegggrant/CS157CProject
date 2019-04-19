@@ -77,6 +77,6 @@ public class Main {
 				main.count();
 			}
 		}
-    s.close();
+		s.close();
 	}
 }
