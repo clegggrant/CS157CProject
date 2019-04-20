@@ -26,8 +26,8 @@ public class Main {
 	private void count() {
 		MongoClientURI connectionString = new MongoClientURI("mongodb://ec2-13-59-38-216.us-east-2.compute.amazonaws.com:27018");
 		MongoClient mongo = new MongoClient(connectionString);
-		MongoDatabase database = mongo.getDatabase("testdb");
-		MongoCollection<Document> collection = database.getCollection("testCol");
+		MongoDatabase database = mongo.getDatabase("projectdb");
+		MongoCollection<Document> collection = database.getCollection("sfdata");
 		System.out.println("Collection " +
 				collection.getNamespace().getDatabaseName() +
 				"." +
