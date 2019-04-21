@@ -61,6 +61,24 @@ public class Main {
 		}
 	}
 
+	private void deleteSingle(String id) {
+
+		MongoClientURI connectionString = new MongoClientURI("mongodb://ec2-13-59-38-216.us-east-2.compute.amazonaws.com:27018");
+		MongoClient mongo = new MongoClient(connectionString);
+		MongoDatabase database = mongo.getDatabase("projectdb");
+		MongoCollection<Document> collection = database.getCollection("sfdata");
+		try {
+			DeleteResult dr = collection.deleteOne(eq("Employee_Identifier", Integer.parseInt(id)));
+			if(dr.getDeletedCount() == 1)
+				System.out.println("Delete Successful");
+			else
+				System.out.println("ID not found");
+		}
+		finally{
+			mongo.close();
+		}
+	}
+
 	public static void main(String[] args) {
 		Logger mongoLogger = Logger.getLogger("org.mongodb.driver");
 		mongoLogger.setLevel(Level.SEVERE);
@@ -75,12 +93,15 @@ public class Main {
 
 		while(true) {
 			System.out.print("command> ");
-			String input = s.nextLine();
+			String input = "";
+			if(s.hasNextLine()) {
+				input = s.nextLine();
+			}
 			if(input.toLowerCase().trim().equals("help")) {
 				System.out.println("exit - exit console");
 				System.out.println("count - return the number of records on file");
-				System.out.println("publicprotection - return employees from public protection from 2017-2018");
-				System.out.println("? - ");
+				System.out.println("publicrotection - return employees from public protection from 2017-2018");
+				System.out.println("deletesingle - delete a single employee by passing employee id");
 				System.out.println("? - ");
 				System.out.println("? - ");
 				System.out.println("? - ");
@@ -101,6 +122,14 @@ public class Main {
 			}
 			else if(input.toLowerCase().trim().equals("publicprotection")) {
 				main.publicProtection();
+			}
+			else if(input.toLowerCase().trim().equals("deletesingle")) {
+				String id = "";
+				System.out.println("Enter the id of the employee to delete: ");
+				if(s.hasNextLine())
+					id = s.nextLine();
+				if(!id.isEmpty())
+					main.deleteSingle(id);
 			}
 			else if(input.isEmpty()) {
 
