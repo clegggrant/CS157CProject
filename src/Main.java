@@ -165,8 +165,8 @@ public class Main {
 			}
 		}
 		finally {
-			mongo.close();
 			cursor.close();
+			mongo.close();
 		}
 	}
 
