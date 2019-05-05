@@ -253,14 +253,26 @@ public class Main {
 		MongoClient mongo = new MongoClient(connectionString);
 		MongoDatabase database = mongo.getDatabase("projectdb");
 		MongoCollection<Document> collection = database.getCollection("sfdata");
+		MongoCursor<Document> cursor = collection.find(and(eq("Year", yr),eq("Health_and_Dental",0))).limit(100).iterator();
 
 		try {
 			collection.updateMany(and(eq("Year", yr),eq("Health_and_Dental",0)), inc("Total_Compensation",1000));
-			UpdateResult result = collection.updateMany(and(eq("Year", yr),eq("Health_and_Dental",0)), inc("Health_and_Dental",1000));
-			System.out.println("Matched: " + result.getMatchedCount() + "\n" +
-					"Updated: " + result.getModifiedCount());
+			int numMatched = 0;
+			int numUpdated = 0;
+			while(cursor.hasNext()) {
+				for (int i = 0; i < 100; i ++) {
+					Document doc = cursor.next();
+					ObjectId obid = (ObjectId)doc.get("_id");
+					UpdateResult result = collection.updateOne((eq("_id",obid)), inc("Health_and_Dental",1000));
+					numMatched += result.getMatchedCount();
+					numUpdated += result.getModifiedCount();
+				}
+			}
+			System.out.println("Matched: " + numMatched + "\n" +
+					"Updated: " + numUpdated);
 		}
 		finally {
+			cursor.close();
 			mongo.close();
 		}
 	}
