@@ -88,7 +88,7 @@ public class Main {
 		MongoDatabase database = mongo.getDatabase("projectdb");
 		MongoCollection<Document> collection = database.getCollection("sfdata");
 
-		MongoCursor<Document> cursor = collection.find(eq("Employee_Identifier",Integer.parseInt(id))).sort(new BasicDBObject("Year",-1)).limit(1).iterator();
+		MongoCursor<Document> cursor = collection.find(and(eq("Employee_Identifier",Integer.parseInt(id)),gt("Salaries",0))).sort(new BasicDBObject("Year",-1)).limit(1).iterator();
 
 		try {
 			ObjectId objID = null;
@@ -103,8 +103,8 @@ public class Main {
 				System.out.println("Giving a raise by 3%");
 				System.out.println("Old salary: " + doc.get("Salaries"));
 				System.out.println("Old total compensation: " + doc.get("Total_Compensation"));
-				newSalary = (Double)doc.get("Salaries") * 1.3;
-				newTotalComp = (Double)doc.get("Total_Compensation") + (Double)doc.get("Salaries") * 0.3;
+				newSalary = (double)doc.get("Salaries") * 1.03;
+				newTotalComp = (double)doc.get("Total_Compensation") + (double)doc.get("Salaries") * 0.03;
 				System.out.println("New salary: " + newSalary);
 				System.out.println("New total compensation: " + newTotalComp);
 				collection.updateOne(eq("_id",objID), new Document("$set", new Document("Salaries",newSalary)));
